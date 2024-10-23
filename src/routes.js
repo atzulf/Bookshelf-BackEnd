@@ -1,3 +1,4 @@
+// merupakan routes untuk menghubungkan handler dengan path
 const {
     addBookHandler,
     getAllBooksHandler,
