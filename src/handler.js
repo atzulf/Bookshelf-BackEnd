@@ -8,6 +8,7 @@ const addBookHandler = (request, h) => {
         pageCount, readPage, reading,
     } = request.payload;
  
+    // apabila nama buku tidak diisi
     if (!name) {
         const response = h.response({
             status: 'fail',
@@ -16,6 +17,7 @@ const addBookHandler = (request, h) => {
         response.code(400);
         return response;
     }
+    // apabila readPage lebih besar dari pageCount
     if (readPage > pageCount) {
         const response = h.response({
             status: 'fail',
@@ -24,11 +26,13 @@ const addBookHandler = (request, h) => {
         response.code(400);
         return response;
     }
+    // apabila nama buku sudah ada
     const id = nanoid(16);
     const finished = readPage === pageCount;
     const insertedAt = new Date().toISOString();
     const updatedAt = insertedAt;
  
+    // apabila nama buku belum ada
     const newBook = {
         id,
         name,
@@ -44,9 +48,11 @@ const addBookHandler = (request, h) => {
         updatedAt,
     };
  
+    // // menambahkan buku baru
     books.push(newBook);
     const isSuccess = books.filter((book) => book.id === id).length > 0;
  
+    // apabila berhasill ditambahkan
     if (isSuccess) {
         const response = h.response({
             status: "success",
@@ -58,7 +64,8 @@ const addBookHandler = (request, h) => {
         response.code(201);
         return response;
     }
- 
+
+    // apabila gagal ditambahkan
     const response = h.response({
         status: "fail",
         message: "Gagal menambahkan buku",
@@ -73,6 +80,7 @@ const getAllBooksHandler = (request, h) => {
         name, reading, finished
     } = request.query;
  
+    // mengisi buku yang 
     let filteredBooks = books;
     if (name) {
         filteredBooks = filteredBooks.filter((book) =>
@@ -80,6 +88,7 @@ const getAllBooksHandler = (request, h) => {
         );
     }
  
+    // apabila buku yang dibaca
     if (reading !== undefined) {
         filteredBooks = filteredBooks.filter((book) => book.reading === (reading === '1'));
     }
